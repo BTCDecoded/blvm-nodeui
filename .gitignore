@@ -1,0 +1,40 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+**/*.rmeta
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.*.sw?
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+
+# Secrets and local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Logs and process files
+*.log
+*.pid
+
+# Coverage / profiling
+/coverage/
+*.profraw
+*.profdata
+flamegraph.svg
+perf.data
+perf.data.old
