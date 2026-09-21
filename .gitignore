@@ -38,3 +38,8 @@ Desktop.ini
 flamegraph.svg
 perf.data
 perf.data.old
+
+# Kept locally; not published
+src/wallet.rs
+static/qr-logo.png
+static/qr-code-styling.js

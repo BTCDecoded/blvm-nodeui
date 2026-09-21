@@ -191,7 +191,6 @@
           <button type="button" class="subtab is-active" data-sub="connection">Connection</button>
           <button type="button" class="subtab" data-sub="peers">Peers</button>
           <button type="button" class="subtab" data-sub="network">Network</button>
-          <button type="button" class="subtab" data-sub="wallet" disabled title="Wallet is not available yet">Wallet</button>
         </nav>
 
         <div class="subpanel is-active" id="sub-connection">
@@ -308,103 +307,6 @@
           <p class="settings-msg" id="network-msg"></p>
         </div>
 
-        <div class="subpanel" id="sub-wallet" hidden>
-          <div class="setting-row">
-            <div>
-              <h3>Connect A Wallet</h3>
-              <p>Paste host, port, username, and password into a Bitcoin wallet.</p>
-            </div>
-          </div>
-          <div class="wallet-kinds">
-            <button type="button" class="chip is-active" data-kind="direct">Direct</button>
-            <button type="button" class="chip" data-kind="tor" disabled title="This node does not advertise a Tor hidden service yet">Tor</button>
-          </div>
-          <div class="wallet-connect">
-            <div>
-              <div class="qr-frame">
-                <div class="qr-wrap" id="wallet-qr-wrap">
-                  <div id="wallet-qr" aria-label="Wallet connection QR"></div>
-                  <div class="qr-logo-card" id="wallet-qr-logo" aria-hidden="true">
-                    <img src="/qr-logo.png" alt="">
-                  </div>
-                </div>
-              </div>
-              <p class="qr-caption">Direct</p>
-            </div>
-            <form id="wallet-form" class="cred-list" autocomplete="off">
-              <div class="cred-row">
-                <span class="cred-label">Host</span>
-                <div class="field-wrap">
-                  <p class="field-static" id="wallet-host" title="This node’s RPC host">127.0.0.1</p>
-                  <button type="button" class="field-icon" data-copy="wallet-host" aria-label="Copy host">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                </div>
-              </div>
-              <div class="cred-row">
-                <span class="cred-label">Port</span>
-                <div class="field-wrap">
-                  <p class="field-static" id="wallet-port" title="This node’s RPC port">48332</p>
-                  <button type="button" class="field-icon" data-copy="wallet-port" aria-label="Copy port">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                </div>
-              </div>
-              <div class="cred-row">
-                <label for="wallet-user">Username</label>
-                <div class="field-wrap">
-                  <input id="wallet-user" type="text" spellcheck="false" placeholder="From [rpc_auth] username">
-                  <button type="button" class="field-icon" data-copy="wallet-user" aria-label="Copy username">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                </div>
-              </div>
-              <div class="cred-row">
-                <label for="wallet-pass">Password</label>
-                <div class="field-wrap field-wrap-two">
-                  <input id="wallet-pass" type="password" placeholder="From [rpc_auth] password">
-                  <button type="button" class="field-icon field-icon-show" id="wallet-pass-toggle" aria-label="Show password">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
-                  <button type="button" class="field-icon" data-copy="wallet-pass" aria-label="Copy password">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                </div>
-              </div>
-              <label class="check-line">
-                <input type="checkbox" id="wallet-ssl">
-                Use TLS
-              </label>
-              <p class="setting-meta" id="wallet-tls-hint">This node’s RPC is HTTP. Leave TLS off unless you terminate TLS in front of it.</p>
-              <div class="cred-row">
-                <span class="cred-label">Connection</span>
-                <div class="field-wrap">
-                  <p class="field-static" id="wallet-uri"></p>
-                  <button type="button" class="field-icon" data-copy="wallet-uri" aria-label="Copy connection">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="setting-row wallet-apps">
-            <div>
-              <h3>Wallet Apps</h3>
-              <p>Paste the host, port, username, and password from this page.</p>
-            </div>
-          </div>
-          <label class="wallet-app-label" for="wallet-app">App</label>
-          <select id="wallet-app" class="wallet-app-select">
-            <option value="sparrow">Sparrow</option>
-            <option value="specter">Specter</option>
-            <option value="fully-noded">Fully Noded</option>
-            <option value="bitbox">BitBoxApp</option>
-          </select>
-          <div class="wallet-help-card">
-            <h4 id="wallet-help-title">Sparrow</h4>
-            <ol id="wallet-help-steps"></ol>
-          </div>
-        </div>
       </article>
     </section>
   </main>
@@ -413,7 +315,6 @@
     <div>blvm-ui <span id="ui-version">v0.1.0</span> · Console Up <strong id="ui-uptime">—</strong> · Last Check <strong id="last-check">just now</strong></div>
     <div class="quiet">Built For Your Node, Not The Cloud</div>
   </footer>
-  <script src="/qr-code-styling.js"></script>
   <script src="/app.js?v=diskwheel"></script>
 </body>
 </html>

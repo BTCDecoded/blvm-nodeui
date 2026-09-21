@@ -15,9 +15,7 @@ use tokio::net::TcpListener;
 const INDEX: &str = include_str!("../static/index.html");
 const CSS: &str = include_str!("../static/app.css");
 const JS: &str = include_str!("../static/app.js");
-const QRCODE_JS: &str = include_str!("../static/qr-code-styling.js");
 const LOGO: &[u8] = include_bytes!("../static/logo.png");
-const QR_LOGO: &[u8] = include_bytes!("../static/qr-logo.png");
 const ROBOTO_400: &[u8] = include_bytes!("../static/fonts/roboto-400.woff2");
 const ROBOTO_500: &[u8] = include_bytes!("../static/fonts/roboto-500.woff2");
 const ROBOTO_700: &[u8] = include_bytes!("../static/fonts/roboto-700.woff2");
@@ -51,24 +49,10 @@ async fn handle(
         (Method::GET, "/") | (Method::GET, "/index.html") => html(INDEX),
         (Method::GET, "/app.css") => css(CSS),
         (Method::GET, "/app.js") => js(JS),
-        (Method::GET, "/qr-code-styling.js") => js(QRCODE_JS),
         (Method::GET, "/logo.png") | (Method::GET, "/favicon.png") => png(LOGO),
-        (Method::GET, "/qr-logo.png") => png(QR_LOGO),
         (Method::GET, "/fonts/roboto-400.woff2") => font(ROBOTO_400),
         (Method::GET, "/fonts/roboto-500.woff2") => font(ROBOTO_500),
         (Method::GET, "/fonts/roboto-700.woff2") => font(ROBOTO_700),
-        (Method::GET, "/api/wallet-defaults") => {
-            let rpc_addr = { state.read().await.rpc_addr.clone() };
-            let (host, port) = split_host_port(&rpc_addr);
-            json_ok(&serde_json::json!({
-                "host": host,
-                "port": port,
-                "username": std::env::var("BLVM_UI_WALLET_USER").unwrap_or_default(),
-                "password": std::env::var("BLVM_UI_WALLET_PASSWORD").unwrap_or_default(),
-                "tls": false,
-                "tor_available": false
-            }))
-        }
         (Method::GET, "/api/status") => {
             let snap = state.read().await.snapshot.clone();
             json_ok(&snap)
@@ -240,11 +224,3 @@ fn json_ok<T: serde::Serialize>(v: &T) -> Response<Full<Bytes>> {
     r
 }
 
-fn split_host_port(rpc_addr: &str) -> (String, String) {
-    if let Some((host, port)) = rpc_addr.rsplit_once(':') {
-        if !host.is_empty() && !port.is_empty() {
-            return (host.trim_matches(['[', ']']).to_string(), port.to_string());
-        }
-    }
-    ("127.0.0.1".into(), "48332".into())
-}

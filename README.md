@@ -2,7 +2,7 @@
 
 Localhost operator console for a [BLVM](https://thebitcoincommons.org/) node.
 
-`blvm-ui` is an **optional** process. It is not consensus, not a wallet daemon, and not required to sync. A node runs without it. The console talks to an already-running node over JSON-RPC and serves a single-page dashboard in the browser.
+`blvm-ui` is an **optional** process. It is not consensus and not required to sync. A node runs without it. The console talks to an already-running node over JSON-RPC and serves a single-page dashboard in the browser.
 
 This repository is the UI crate only. The node, protocol, and consensus live in the rest of the Bitcoin Commons stack.
 
@@ -12,7 +12,7 @@ This repository is the UI crate only. The node, protocol, and consensus live in 
 |-----|----------|
 | **Home** | Sync progress, peer mix (inbound / outbound), last ten blocks |
 | **Insights** | Health, disk footprint, block-arrival bars, node uptime |
-| **Settings** | RPC connection, peers, network, wallet credential sheet, node power |
+| **Settings** | RPC connection, peers, network, node power |
 
 Status lights:
 
@@ -52,8 +52,6 @@ BLVM_UI_RPC=127.0.0.1:38332 cargo run --release
 |----------|---------|---------|
 | `BLVM_UI_LISTEN` | `127.0.0.1:3847` | Dashboard bind address |
 | `BLVM_UI_RPC` | `127.0.0.1:48332` | Node JSON-RPC address |
-| `BLVM_UI_WALLET_USER` | unset | Prefill Settings → Wallet username |
-| `BLVM_UI_WALLET_PASSWORD` | unset | Prefill Settings → Wallet password |
 
 Bind stays loopback by default. Do not expose this HTTP port on a public interface.
 
@@ -88,21 +86,12 @@ Served on the console bind address, not on the node.
 | `POST` | `/api/connect` | Body `{ "rpc": "host:port" }` — switch RPC target |
 | `POST` | `/api/rpc` | Whitelisted node RPC only (see below) |
 | `POST` | `/api/node` | Body `{ "action": "on" \| "off" \| "toggle" }` — start/stop the node process |
-| `GET` | `/api/wallet-defaults` | Prefill for the wallet credential sheet |
 
 Settings may call **only**:
 
 `addnode`, `disconnectnode`, `setban`, `listbanned`, `clearbanned`, `setnetworkactive`
 
-Wallet traffic is **not** proxied. `stop` is **not** on the whitelist. Node power uses `SIGTERM` (this node’s graceful flush), then `SIGKILL` if needed. The UI process is never killed by that path.
-
-## Wallet sheet
-
-Settings → Wallet is a **Bitcoin Core–style RPC credential sheet** (not Electrum, not Lightning). The QR encodes:
-
-`btcstandup://user:pass@host:port/?label=Commons`
-
-Host and port are locked to the console’s current node address. Tor is not offered: this node does not advertise onion addresses yet.
+`stop` is **not** on the whitelist. Node power uses `SIGTERM` (this node’s graceful flush), then `SIGKILL` if needed. The UI process is never killed by that path.
 
 ## Layout
 
@@ -114,7 +103,6 @@ src/
   rpc.rs        JSON-RPC client + settings whitelist
   state.rs      Live snapshot and connect / frozen / down
   feed.rs       Latest-blocks tiles (per RPC address)
-  wallet.rs     StandUp URI encoding
   node_ctl.rs   SIGTERM / SIGKILL / spawn remembered blvm
 static/         Source for embedded HTML, CSS, JS, fonts, logos
 module.toml     Pin for a later `blvm load blvm-ui` spawn (not wired yet)
@@ -126,7 +114,7 @@ module.toml     Pin for a later `blvm load blvm-ui` spawn (not wired yet)
 cargo test
 ```
 
-Coverage includes the settings RPC whitelist, status snapshot lights, block-feed chunking, and wallet URI encoding.
+Coverage includes the settings RPC whitelist, status snapshot lights, and block-feed chunking.
 
 ## What this crate is not
 
